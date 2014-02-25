@@ -42,6 +42,7 @@ public class ExampleDriver {
       pgd.addClass("neuralnets", NeuralNetwork.class, "Neural Network classification");
 
       pgd.addClass("gen", Generator.class, "Random Data Generator Util");
+      pgd.addClass("ssh", SemiSupervisedHashing.class, "Semi-Supervised Hashing");
       pgd.driver(args);
     } catch (Throwable e) {
       e.printStackTrace();
