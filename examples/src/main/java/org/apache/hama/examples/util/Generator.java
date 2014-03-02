@@ -30,7 +30,7 @@ public class Generator {
       System.out
           .println("  vectorwritablematrix: Generate a random matrix, consisting of VectorWritables.");
       System.out
-          .println("  raw2seq: raw matrix text file to vectorwritablematrix with SequenceFile format.");
+          .println("  raw2seq: convert local raw matrix file to vectorwritablematrix with SequenceFile format.");
       System.exit(1);
     }
 

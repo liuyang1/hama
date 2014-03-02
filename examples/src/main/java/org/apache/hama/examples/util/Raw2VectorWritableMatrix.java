@@ -17,8 +17,11 @@
  */
 package org.apache.hama.examples.util;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.util.Scanner;
 import java.util.Random;
 
 import org.apache.commons.logging.Log;
@@ -45,15 +48,13 @@ public class Raw2VectorWritableMatrix {
     // check arguments
     if (args.length < 2) {
       System.out
-          .println("Usage: <inputPath> <outputPath>"
+          .println("Usage: <localinputPath> <outputPath>"
               + " [<saveTransposed=true|false(default)>] [<usePipesVectorWritable=true|false(default)>]");
       System.out
           .println("e.g., hama jar hama-examples-*.jar gen raw2seq /tmp/matrix.raw /tmp/matrix.seq");
       System.exit(1);
     }
 
-    // int rowSize = Integer.parseInt(args[0]);
-    // int colSize = Integer.parseInt(args[1]);
     Path inputPath = new Path(args[0]);
     Path outputPath = new Path(args[1]);
 
@@ -76,13 +77,30 @@ public class Raw2VectorWritableMatrix {
     writeMatrix(matrix, outputPath, saveTransposed, usePipesVectorWritable);
   }
 
-  public static double [][] createMatrixFromRaw(Path inputPath){
-      final double [][] matrix = new double[2][2];
-      matrix[0][0] = 1;
-      matrix[0][1] = 0;
-      matrix[1][0] = 0;
-      matrix[1][1] = 1;
+  public static double [][] createMatrixFromRaw(Path inputPath)
+      throws FileNotFoundException
+  {
+      Scanner input;
+      try{
+          File in = new File(inputPath.toString());
+          input = new Scanner(in);
+      }
+      catch(FileNotFoundException ex) {
+          LOG.debug("not find inputPath " + inputPath.toString());
+          return null;
+      }
+      int height = input.nextInt();
+      int width = input.nextInt();
+      LOG.debug("height " + height + " width " + width);
+      final double [][] matrix = new double[height][width];
+      for (int i=0; i < height; i++) {
+          for (int j=0; j < width; j++) {
+              matrix[i][j] = input.nextDouble();
+          }
+      }
+      input.close();
       return matrix;
+
   }
 
   public static Path writeMatrix(double[][] matrix, Path path,
