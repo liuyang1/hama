@@ -29,6 +29,8 @@ public class Generator {
       System.out.println("  square: Generate random square matrix.");
       System.out
           .println("  vectorwritablematrix: Generate a random matrix, consisting of VectorWritables.");
+      System.out
+          .println("  raw2seq: raw matrix text file to vectorwritablematrix with SequenceFile format.");
       System.exit(1);
     }
 
@@ -44,6 +46,8 @@ public class Generator {
     } else if (args[0].equals("square")) {
       System.out.println("Not implemented yet.");
       // SquareMatrixGen.main(newArgs);
+    } else if (args[0].equals("raw2seq")) {
+      Raw2VectorWritableMatrix.main(newArgs);
     }
   }
 }

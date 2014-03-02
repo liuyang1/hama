@@ -43,6 +43,7 @@ public class ExampleDriver {
 
       pgd.addClass("gen", Generator.class, "Random Data Generator Util");
       pgd.addClass("ssh", SemiSupervisedHashing.class, "Semi-Supervised Hashing");
+      pgd.addClass("spmv", SpMV.class, "SpMV");
       pgd.driver(args);
     } catch (Throwable e) {
       e.printStackTrace();
