@@ -72,8 +72,12 @@ public:
       vector<double> col_values;
       
       // while for each col of matrix B
+      int j = 0;
       while (context.sequenceFileReadNext<int,string>(seq_file_id_, b_col_key, b_col_vector_str)) {
-        
+        if(j==i){
+            break;
+        }
+        j++;
         DenseDoubleVector *b_col_vector = new DenseDoubleVector(b_col_vector_str);
         
         double dot = a_row_vector->dot(b_col_vector);
