@@ -15,6 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
+ * liuyang1 modifed version.2014-03-16
+ */
 
 #include "hama/Pipes.hh"
 #include "hama/TemplateFactory.hh"
@@ -42,7 +45,8 @@ private:
   string master_task_;
   int seq_file_id_;
   string HAMA_MAT_MULT_B_PATH_;
-  
+  vector<DenseDoubleVector*> matrixB;
+
 public:
   MatrixMultiplicationBSP(BSPContext<int,string,int,string,string>& context) {
     seq_file_id_ = 0;
@@ -52,7 +56,15 @@ public:
   void setup(BSPContext<int,string,int,string,string>& context) {
     // Choose one as a master
     master_task_ = context.getPeerName(context.getNumPeers() / 2);
-    
+
+    reopenMatrixB(context);
+    int b_col_key;
+    string b_col_vector_str;
+    while(context.sequenceFileReadNext<int, string>(seq_file_id_, b_col_key, b_col_vector_str))
+    {
+        DenseDoubleVector* b_col_vector = new DenseDoubleVector(b_col_vector_str);
+        matrixB.push_back(b_col_vector);
+    }
     reopenMatrixB(context);
   }
   
@@ -65,25 +77,32 @@ public:
       
       DenseDoubleVector *a_row_vector = new DenseDoubleVector(a_row_vector_str);
       
-      int b_col_key = 0;
-      string b_col_vector_str;
       
       // dynamic column values, depend on matrix B cols
       vector<double> col_values;
       
       // while for each col of matrix B
-      int j = 0;
+      /*
+      int b_col_key = 0;
+      string b_col_vector_str;
       while (context.sequenceFileReadNext<int,string>(seq_file_id_, b_col_key, b_col_vector_str)) {
-        if(j==i){
-            break;
-        }
-        j++;
+	if(b_col_key > a_row_key){
+		break;
+	}
         DenseDoubleVector *b_col_vector = new DenseDoubleVector(b_col_vector_str);
         
         double dot = a_row_vector->dot(b_col_vector);
         
         col_values.push_back(dot);
       }
+      reopenMatrixB(context);
+      */
+      for(int i=0; i<=a_row_key; i++)
+      {
+          double dot = a_row_vector->dot(matrixB[i]);
+          col_values.push_back(dot);
+      }
+
       
       DenseDoubleVector *col_values_vector = new DenseDoubleVector(col_values.size(), col_values.data());
       
@@ -93,7 +112,6 @@ public:
       message << ":" << a_row_key << ":" << col_values_vector->toString();
       context.sendMessage(master_task_, message.str());
       
-      reopenMatrixB(context);
     }
     
     context.sequenceFileClose(seq_file_id_);
