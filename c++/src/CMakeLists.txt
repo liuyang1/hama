@@ -60,6 +60,11 @@ add_executable(matrixmultiplication main/native/examples/impl/matrixmultiplicati
 target_link_libraries(matrixmultiplication DenseDoubleVector hadooputils)
 output_directory(matrixmultiplication examples)
 
+# for signedmatrix
+add_executable(signedmatrix main/native/examples/impl/signedmatrix.cc)
+target_link_libraries(signedmatrix DenseDoubleVector hadooputils)
+output_directory(signedmatrix examples)
+
 add_library(DenseDoubleVector 
     main/native/examples/impl/DenseDoubleVector.cc
 )

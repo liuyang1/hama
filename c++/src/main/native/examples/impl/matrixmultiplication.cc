@@ -65,7 +65,7 @@ public:
         DenseDoubleVector* b_col_vector = new DenseDoubleVector(b_col_vector_str);
         matrixB.push_back(b_col_vector);
     }
-    reopenMatrixB(context);
+    // reopenMatrixB(context);
   }
   
   void bsp(BSPContext<int,string,int,string,string>& context) {
