@@ -55,7 +55,7 @@ public class Raw2FlagMatrix{
           .println("Usage: <localinputPath> <outputPath>"
               + " [<saveTransposed=true|false(default)>] [<usePipesVectorWritable=true|false(default)>]");
       System.out
-          .println("e.g., hama jar hama-examples-*.jar gen raw2flagseq /tmp/matrix.raw /tmp/matrix.seq");
+          .println("e.g., hama jar hama-examples-*.jar gen raw2flag /tmp/matrix.raw /tmp/matrix.seq");
       System.exit(1);
     }
 
@@ -95,6 +95,7 @@ public class Raw2FlagMatrix{
       }
       int height = input.nextInt();
       int width = input.nextInt();
+      input.nextLine();
       LOG.debug("height " + height + " width " + width);
       final Vector<double[]> matrix = new Vector<double[]>();
       for (int i=0; i < height; i++) {
@@ -141,7 +142,7 @@ public class Raw2FlagMatrix{
         for (int i = 0; i < matrix.size(); i++) {
             double[] a = matrix.get(i);
             DenseDoubleVector rowVector = new DenseDoubleVector(a);
-            writer.append(new IntWritable(i), new PipesVectorWritable(rowVector));
+            writer.append(new IntWritable(i), new VectorWritable(rowVector));
             LOG.debug("IntWritable: " + i + " PipesVectorWritable: "
                 + rowVector.toString());
         }
