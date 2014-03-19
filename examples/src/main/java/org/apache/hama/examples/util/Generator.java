@@ -31,6 +31,8 @@ public class Generator {
           .println("  vectorwritablematrix: Generate a random matrix, consisting of VectorWritables.");
       System.out
           .println("  raw2seq: convert local raw matrix file to vectorwritablematrix with SequenceFile format.");
+      System.out
+          .println("  raw2flag: convert local raw matrix file to vectorwritablematrix with SequenceFile format.");
       System.exit(1);
     }
 
@@ -48,6 +50,8 @@ public class Generator {
       // SquareMatrixGen.main(newArgs);
     } else if (args[0].equals("raw2seq")) {
       Raw2VectorWritableMatrix.main(newArgs);
+    } else if (args[0].equals("raw2flag")) {
+      Raw2FlagMatrix.main(newArgs);
     }
   }
 }
