@@ -18,6 +18,11 @@
 /*
  * liuyang1 
  * 2014-03-18 08:49:27 framework
+ * 2014-03-18 09:54:25 finish
+ * 这里注意,输入数据都是一个矩阵
+ * 该矩阵正体为N*(960+flaglen)部分,后序带着若干个flag数值.
+ * 若得矩阵的一行,则该行前960,表示为列向量.根据后序的flag,也就是对应行
+ * 将列向量与行向量相乘,得到960*960的矩阵,结果累加,得到最终结果
  */
 
 #include "hama/Pipes.hh"
@@ -101,6 +106,29 @@ class SignedMatrixBSP: public BSP<int, string, int, string, string>
                         }
                     }
                 }
+            }
+
+            std::stringstream msg;
+            for(int i=0; i<SIGNEDMATRIXDIM; i++)
+                for(int j=0; j<SIGNEDMATRIXDIM; j++)
+                    msg<<ans[i][j]<<",";
+            context.sendMessage(mMasterTask, msg.str());
+            context.sequenceFileClose(mSeqFileID);
+            context.sync();
+        }
+
+        void cleanup(BSPContext<int, string, int, string, string>& context)
+        {
+            if (context.getPeerName().compare(mMasterTask) == 0)
+            {
+                double ans[SIGNEDMATRIXDIM][SIGNEDMATRIXDIM] = {0};
+                int msg_count = context.getNumCurrentMessages();
+                for(int i=0; i < msg_count; i++)
+                {
+                    string received = context.getCurrentMessage();
+                    // double, double, double
+                }
+
             }
         }
 

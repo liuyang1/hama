@@ -27,7 +27,7 @@
   </property>
   <property>
     <name>hama.mat.mult.B.path</name>
-    <value>/examples/input/signedmatrix/MatrixA.seq</value>
+    <value>/examples/input/signedmatrix/MatrixB.seq</value>
   </property>
   <property>
     <name>bsp.input.format.class</name>
@@ -71,6 +71,6 @@
   </property>
   <property>
     <name>bsp.peers.num</name>
-    <value>12</value>
+    <value>3</value>
   </property>
 </configuration>
