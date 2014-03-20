@@ -47,13 +47,13 @@ public class Raw2FlagMatrix{
       IOException, ClassNotFoundException {
 
     boolean saveTransposed = false;
-    boolean usePipesVectorWritable = false;
+    boolean usePipesVectorWritable = true;
 
     // check arguments
     if (args.length < 2) {
       System.out
           .println("Usage: <localinputPath> <outputPath>"
-              + " [<saveTransposed=true|false(default)>] [<usePipesVectorWritable=true|false(default)>]");
+              + " [<saveTransposed=true|false(default)>] [<usePipesVectorWritable=true(default)|false>]");
       System.out
           .println("e.g., hama jar hama-examples-*.jar gen raw2flag /tmp/matrix.raw /tmp/matrix.seq");
       System.exit(1);
@@ -104,6 +104,7 @@ public class Raw2FlagMatrix{
           for (int j=0; j<ss.length; j++){
               a[j] = Double.parseDouble(ss[j]);
           }
+          LOG.debug("vector " + ss.length);
           matrix.add(a);
       }
       input.close();
@@ -143,7 +144,7 @@ public class Raw2FlagMatrix{
             double[] a = matrix.get(i);
             DenseDoubleVector rowVector = new DenseDoubleVector(a);
             writer.append(new IntWritable(i), new VectorWritable(rowVector));
-            LOG.debug("IntWritable: " + i + " PipesVectorWritable: "
+            LOG.debug("IntWritable: " + i + " VectorWritable: "
                 + rowVector.toString());
         }
       }
